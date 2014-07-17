@@ -62,9 +62,9 @@ angular.module('mainController', [])
         data: 'myData',
         columnDefs: [
             {field:'Name', displayName:'Name', cellTemplate: '<a target="_blank" href="{{row.entity.URL}}">{{row.getProperty(col.field)}}</a>'},
-        	{field: 'Rating', displayName: 'Ratings'},
+        	{field: 'Rating', displayName: 'Ratings', width: 90},
         	{field: 'Review', displayName: 'Review'},
-        	{field: 'Distance', displayName: 'Distance'},
+        	{field: 'Distance', displayName: 'Distance', width: 100},
         	{field:'URL', visible:false},
         	]
         };
