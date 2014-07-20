@@ -22,6 +22,14 @@ angular.module('mainController', [])
 			getLocation();
 		}
 
+		function init() {
+			lat = 37.7833;
+			long = -122.4167;
+	    	position = lat+'%2C'+long;
+	   		get(position,$scope.name);
+	   		$(".gridStyle").removeClass("hide");
+		}
+
 		function showPosition(position) {
 	    position = position.coords.latitude+'%2C'+position.coords.longitude;
 	   	get(position,$scope.name);
@@ -68,6 +76,9 @@ angular.module('mainController', [])
         	{field:'URL', visible:false},
         	]
         };
+
+
+        init();
 
 	});
 
