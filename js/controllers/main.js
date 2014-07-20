@@ -4,6 +4,14 @@ angular.module('mainController', [])
 		var location,lat,long,marker,map,group, name;
 		var points = [];
 
+		$scope.name = "Pizza";
+
+
+		$scope.init = function() {
+		position = "37.7833%2C122.4167";
+        get(position,$scope.name);
+    	}
+
 
 		// See if there browser has geolocation
 		function getLocation() {
@@ -22,7 +30,12 @@ angular.module('mainController', [])
 		$scope.search = function() {
 			$(".ngGrid").hide();
 			$(".fa-spinner").show();
-			getLocation();
+
+			if($("#location").is(":checked")){
+				getLocation();
+			} else {
+				init();
+			}
 		}
 
 		// Callback for once the user grants us permission to use there location
@@ -31,6 +44,15 @@ angular.module('mainController', [])
 			long = position.coords.longitude
 
 	    	position = position.coords.latitude+'%2C'+position.coords.longitude;
+	   		get(position,$scope.name);
+	   		$(".gridStyle").removeClass("hide");
+		}
+
+
+		function init() {
+			lat = 37.7833;
+			long = -122.4167;
+	    	position = lat+'%2C'+long;
 	   		get(position,$scope.name);
 	   		$(".gridStyle").removeClass("hide");
 		}
@@ -58,6 +80,9 @@ angular.module('mainController', [])
 		 		// On return of our promise from the factory
 	            .then(function(data) {
 	               $scope.data = data.businesses;
+
+	               $scope.myData = [];
+	               myData = [];
 
 	               for(var i = 0;i<$scope.data.length;i++) {
 	               	var distance = $scope.data[i].distance*0.000621371;
@@ -123,5 +148,9 @@ angular.module('mainController', [])
         	{field: 'URL', visible:false},
         	]
         };
+
+
+        init();
+
 
 	});
