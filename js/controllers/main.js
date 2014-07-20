@@ -19,7 +19,13 @@ angular.module('mainController', [])
 		$scope.search = function() {
 			$(".ngGrid").hide();
 			$(".fa-spinner").show();
-			getLocation();
+
+
+			if($("#location").is(":checked")){
+				getLocation();
+			} else {
+				init();
+			}
 		}
 
 		function init() {
