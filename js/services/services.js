@@ -1,4 +1,6 @@
 angular.module('YelpService', [])
+// super simple service
+// each function returns a promise object 
 
 .factory('Yelp',function($http,$q) {
 return {
