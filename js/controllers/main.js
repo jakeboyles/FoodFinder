@@ -5,6 +5,8 @@ angular.module('mainController', [])
 	.controller('mainController', function($scope,Yelp) {
 		var location;
 
+		$scope.name = "pizza";
+
 		function getLocation() {
 		    if (navigator.geolocation) {
 		        navigator.geolocation.getCurrentPosition(showPosition);
@@ -45,7 +47,7 @@ angular.module('mainController', [])
 		var myData = [];
 
 		function get(position,name) {
-			myData=[];
+		 myData=[];
 		 Yelp.get(position,name)
 	            // then() called when son gets back
 	            .then(function(data) {
@@ -53,33 +55,35 @@ angular.module('mainController', [])
 
 	               for(var i = 0;i<$scope.data.length;i++) {
 	               	var distance = $scope.data[i].distance*0.000621371;
+
 	               	var restaurant = {
 	               		Name:$scope.data[i].name,
 	               		Rating:$scope.data[i].rating,
 	               		Review:$scope.data[i].snippet_text,
 	               		URL:$scope.data[i].url,
 	               		Distance: distance.toFixed(2) + " Miles",
-
 	               	}
+
 	               	myData.push(restaurant);
 	               }
 
 	             $scope.myData = myData;
 	            
-	            }, function(error) {
-	                // promise rejected, could log the error with: console.log('error', error);
-	                prepareSundayRoastDinner();
+	            }, 
+
+	            function(error) {
+	            	alert("ERROR IN API");
 	            });
 		}
 
 		$scope.gridOptions = { 
-        data: 'myData',
-        columnDefs: [
-            {field:'Name', displayName:'Name', cellTemplate: '<a target="_blank" href="{{row.entity.URL}}">{{row.getProperty(col.field)}}</a>'},
-        	{field: 'Rating', displayName: 'Ratings', width: 90},
-        	{field: 'Review', displayName: 'Review'},
-        	{field: 'Distance', displayName: 'Distance', width: 100},
-        	{field:'URL', visible:false},
+        	data: 'myData',
+        	columnDefs: [
+            	{field:'Name', displayName:'Name', cellTemplate: '<a target="_blank" href="{{row.entity.URL}}">{{row.getProperty(col.field)}}</a>'},
+        		{field: 'Rating', displayName: 'Ratings', width: 90},
+        		{field: 'Review', displayName: 'Review'},
+        		{field: 'Distance', displayName: 'Distance', width: 100},
+        		{field:'URL', visible:false},
         	]
         };
 
