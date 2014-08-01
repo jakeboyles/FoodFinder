@@ -1,26 +1,23 @@
-
-<div>
 <div classs="information col-md-12">
-		<form>
-			<h2>I am really hungry for some <input type="text" ng-model="name"></h2>
+	<form>
+		<h2>I am really hungry for some <input type="text" ng-model="name"></h2>
 
-			<div class="col-md-3 col-md-offset-5 options">
-				<button class="btn btn-primary" ng-click="search()">Search</button> 
+		<div class="col-md-3 col-md-offset-5 options">
+			<button class="btn btn-primary" ng-click="search()">Search</button> 
 
-				<div class="useLocation">
-					<input id="location" type="checkbox"> 
-					<label>Use My Location</label>
-				</div>
+			<div class="useLocation">
+				<input id="location" type="checkbox"> 
+				<label>Use My Location</label>
 			</div>
+		</div>
 
-	<div class="col-md-6">
-		<div class="hide gridStyle" ng-grid="gridOptions"></div>
-	</div>
+		<div class="col-md-6">
+			<div class="hide gridStyle" ng-grid="gridOptions"></div>
+		</div>
 
-	<div class="col-md-5">
-	 	<div id="map"></div>
-	</div>
-</form>
-
+		<div class="col-md-5">
+		 	<div id="map"></div>
+		</div>
+	</form>
 </div>
 	

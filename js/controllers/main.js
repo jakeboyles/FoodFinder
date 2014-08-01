@@ -1,7 +1,7 @@
 angular.module('mainController', [])
 
 
-	// inject the Todo service factory into our controller
+	// inject the Yelp service factory into our controller
 	.controller('mainController', function($scope,Yelp) {
 		var location,lat,long,marker,map,group, name;
 		var points = [];
@@ -51,6 +51,8 @@ angular.module('mainController', [])
 	   		$(".gridStyle").removeClass("hide");
 		}
 
+
+
 		function showPosition(position) {
 	    	position = position.coords.latitude+'%2C'+position.coords.longitude;
 	   		get(position,$scope.name);
@@ -60,22 +62,22 @@ angular.module('mainController', [])
 
 		function get(position,name) {
 
-		if(typeof map !== 'undefined') {
-			map.remove();
-		}
+			if(typeof map !== 'undefined') {
+				map.remove();
+			}
 		 
-		if(typeof map !== 'undefined' || !map || map == null) {
-	 	map = L.map('map').setView([lat, long], 10);
-	 	}
+			if(typeof map !== 'undefined' || !map || map == null) {
+		 	map = L.map('map').setView([lat, long], 10);
+		 	}
 
-		L.tileLayer('http://{s}.tiles.mapbox.com/v3/jakeboyles.j0ajipap/{z}/{x}/{y}.png', {
-		    attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>',
-		    maxZoom: 18
-		}).addTo(map);
+			L.tileLayer('http://{s}.tiles.mapbox.com/v3/jakeboyles.j0ajipap/{z}/{x}/{y}.png', {
+			    attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>',
+			    maxZoom: 18
+			}).addTo(map);
 
 
-		 Yelp.get(position,name)
-	            // then() called when son gets back
+			Yelp.get(position,name)
+	            // then() called when promise comes back
 	            .then(function(data) {
 	               $scope.data = data.businesses;
 
@@ -104,7 +106,6 @@ angular.module('mainController', [])
 	               		})
 	               	}
 
-
 	               	var Name = $scope.data[i].name;
 	               	var Rating = $scope.data[i].rating;
 	               	var Review = $scope.data[i].snippet_text;
@@ -115,17 +116,16 @@ angular.module('mainController', [])
 
 	               	myData.push(restaurant);
 
-	               } // This ends Yelp.Get
+		   			 } // This ends the for loop
 
-	            
-	            $scope.myData = myData;
+
+	            	$scope.myData = myData;
 	             
-
-	            // Since the GeoEncode data has to go through an API and is acyncronous we have to delay our fitting of the map until all the data is resolved
-	            setTimeout(function(){
-	             var group = new L.featureGroup(points);
- 				 map.fitBounds(group.getBounds());
- 				},1000)
+		            // Since the GeoEncode data has to go through an API and is acyncronous we have to delay our fitting of the map until all the data is resolved
+		            setTimeout(function(){
+		             var group = new L.featureGroup(points);
+	 				 map.fitBounds(group.getBounds());
+	 				},1000)
 
 	            
 	            }, 
@@ -134,19 +134,19 @@ angular.module('mainController', [])
 	            	alert("ERROR IN API");
 	            });
 
-		}
+		} // End of get function.
+
 
 		$scope.gridOptions = { 
-        data: 'myData',
-        columnDefs: [
-            {field: 'Name', displayName:'Name', cellTemplate: '<a target="_blank" href="{{row.entity.URL}}">{{row.getProperty(col.field)}}</a>'},
-        	{field: 'Rating', displayName: 'Ratings', width: 90},
-        	{field: 'Review', displayName: 'Review'},
-        	{field: 'Distance', displayName: 'Distance', width: 100},
-        	{field: 'URL', visible:false},
-
-        	]
-        };
+	        data: 'myData',
+	        columnDefs: [
+	            {field: 'Name', displayName:'Name', cellTemplate: '<a target="_blank" href="{{row.entity.URL}}">{{row.getProperty(col.field)}}</a>'},
+	        	{field: 'Rating', displayName: 'Ratings', width: 90},
+	        	{field: 'Review', displayName: 'Review'},
+	        	{field: 'Distance', displayName: 'Distance', width: 100},
+	        	{field: 'URL', visible:false},
+	        	]
+	    };
 
         init();
 
