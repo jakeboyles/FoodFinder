@@ -1,11 +1,15 @@
 angular.module('mainController', [])
 
+
+	// inject the Todo service factory into our controller
 	.controller('mainController', function($scope,Yelp) {
 		var location,lat,long,marker,map,group, name;
 		var points = [];
+		$scope.name = "pizza";
+		var myData = [];
 
 
-
+		// Constructor for our restaurant object
 		function Restaurant (name,rating,review,url,distance) {
 		   this.Name = name,
 		   this.Rating = rating,
@@ -15,39 +19,45 @@ angular.module('mainController', [])
 		}
 
 
-		// See if there browser has geolocation
 		function getLocation() {
 		    if (navigator.geolocation) {
 		        navigator.geolocation.getCurrentPosition(showPosition);
 		    } else {
-		        alert("Sorry you don't have geolocation on your browser.")
+		        x.innerHTML = "Geolocation is not supported by this browser.";
 		    }
 		}
 
-		// This is here to set the width of the NG-Grid to the width of its parent container, because it wont accept 100% :(
 		var width = $(".gridStyle").parent().width();
 		$(".gridStyle").width(width);
 
-		// Once the user clicks the search button lets do this...
 		$scope.search = function() {
 			$(".ngGrid").hide();
 			$(".fa-spinner").show();
-			getLocation();
+
+
+			if($("#location").is(":checked")){
+				getLocation();
+			} else {
+				init();
+			}
 		}
 
-		// Callback for once the user grants us permission to use there location
-		function showPosition(position) {
-			lat = position.coords.latitude;
-			long = position.coords.longitude
 
+		function init() {
+			lat = 37.7833;
+			long = -122.4167;
+	    	position = lat+'%2C'+long;
+	   		get(position,$scope.name);
+	   		$(".gridStyle").removeClass("hide");
+		}
+
+		function showPosition(position) {
 	    	position = position.coords.latitude+'%2C'+position.coords.longitude;
 	   		get(position,$scope.name);
 	   		$(".gridStyle").removeClass("hide");
 		}
 
-		var myData = [];
 
-		// Get data from the Yelp Api by calling the Yelp Factory (services/services.js)
 		function get(position,name) {
 
 		if(typeof map !== 'undefined') {
@@ -65,7 +75,7 @@ angular.module('mainController', [])
 
 
 		 Yelp.get(position,name)
-		 		// On return of our promise from the factory
+	            // then() called when son gets back
 	            .then(function(data) {
 	               $scope.data = data.businesses;
 
@@ -78,7 +88,8 @@ angular.module('mainController', [])
 	               		marker = L.marker([$scope.data[i].location.coordinate.latitude, $scope.data[i].location.coordinate.longitude]).addTo(map);
 	               		marker.bindPopup("<h3><a href='"+$scope.data[i].url+"'>"+$scope.data[i].name+"</a></h3><img src='"+$scope.data[i].rating_img_url_small+"' /><br>"+$scope.data[i].snippet_text).openPopup();
 	               		points.push(marker);
-	               	} 
+	               	}
+
 	               	else {
 	               		// If not we need to do some geo encoding
 	               		var location = $scope.data[i].location.address + " " + $scope.data[i].location.city + $scope.data[i].location.state_code;
@@ -101,12 +112,12 @@ angular.module('mainController', [])
 	               	var Distance = distance.toFixed(2) + " Miles";
 
 	               	var restaurant = new Restaurant(Name,Rating,Review,URL,Distance);
-	               		
-	               	
+
 	               	myData.push(restaurant);
 
-	               }
+	               } // This ends Yelp.Get
 
+	            
 	            $scope.myData = myData;
 	             
 
@@ -117,13 +128,14 @@ angular.module('mainController', [])
  				},1000)
 
 	            
-	            }, function(error) {
-	                alert(error);
+	            }, 
+
+	            function(error) {
+	            	alert("ERROR IN API");
 	            });
 
 		}
 
-		// Our options for the NG-Grid
 		$scope.gridOptions = { 
         data: 'myData',
         columnDefs: [
@@ -132,7 +144,15 @@ angular.module('mainController', [])
         	{field: 'Review', displayName: 'Review'},
         	{field: 'Distance', displayName: 'Distance', width: 100},
         	{field: 'URL', visible:false},
+
         	]
         };
 
+        init();
+
 	});
+
+
+
+      
+
