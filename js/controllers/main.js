@@ -5,6 +5,16 @@ angular.module('mainController', [])
 		var points = [];
 
 
+
+		function Restaurant (name,rating,review,url,distance) {
+		   this.Name = name,
+		   this.Rating = rating,
+		   this.Review = review,
+		   this.URL = url,
+		   this.Distance;
+		}
+
+
 		// See if there browser has geolocation
 		function getLocation() {
 		    if (navigator.geolocation) {
@@ -83,15 +93,16 @@ angular.module('mainController', [])
 	               		})
 	               	}
 
-	               	// Restaurant Object for NG-Grid
-	               	var restaurant = {
-	               		Name:$scope.data[i].name,
-	               		Rating:$scope.data[i].rating,
-	               		Review:$scope.data[i].snippet_text,
-	               		URL:$scope.data[i].url,
-	               		Distance: distance.toFixed(2) + " Miles",
-	               	}
 
+	               	var Name = $scope.data[i].name;
+	               	var Rating = $scope.data[i].rating;
+	               	var Review = $scope.data[i].snippet_text;
+	               	var URL = $scope.data[i].url;
+	               	var Distance = distance.toFixed(2) + " Miles";
+
+	               	var restaurant = new Restaurant(Name,Rating,Review,URL,Distance);
+	               		
+	               	
 	               	myData.push(restaurant);
 
 	               }
